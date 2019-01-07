@@ -1,4 +1,13 @@
 require 'set'
+puts "WITAJ W ANALIZATORZE DAT! "
+puts "Z której opcji chcesz skorzystać?"
+puts " 1 - konwersja daty na słowa" 
+puts " 2 - konwersja słowa na datę" 
+
+abc = gets 
+abc = abc.chomp
+if abc.to_s == "1"
+
 puts "Podaj swoją datę urodzenia"  	#communicate
 
 data = gets 				#getting date of birth from user
@@ -56,34 +65,74 @@ if wynik == "tak"
 puts "Dziękuję. Trwa analiza..."
 
 dictionary=[]
-File.open('slowa.txt','r') do |file|
-file.each {|line| dictionary<<line}
-end
-
-#dictionary =File.readlines("slowa.txt")
-#dictionary.inspect
-
+dictionary = File.open('slowa.txt', 'r'){|file| file.readlines.collect{|line|line.chomp}}
 puts "Twoja data w innych systemach:" 
 
 inter = data.to_i
 nazwa = [] 
 
+for j in (0..10)
+  nazwa[j] = "0"
+end
 for i in (11..36)
 nazwa[i] = inter.to_s(i) 
 puts nazwa[i] 
 
 end
 
-def same_elements?(nazwa, dictionary)
-  puts nazwa.to_set == dictionary.to_set
-  
+se=[]
+
+for k in (11..36)
+  for l in (0..2965376)
+  if nazwa[k].to_s == dictionary[l].to_s
+  se = nazwa[k] 
+  end
+end
 end
 
-same_elements?(nazwa,dictionary[0..24]) 
+puts "Po konwersji Twojej daty znaleziono następujące słowa: "
+puts se 
 
 else
 print "Podana data jest #{checkDateUpdated(date) ? "" : "nie"}poprawna! \n"
 system ('ruby valid.rb') 
-end
+end 
 
+elsif abc.to_s == "2"
+data = gets
+  daysInMonth=[31,28,31,30,31,30,31,31,30,31,30,31]
 
+  slowo=data.to_i(36)
+  rok=(slowo-(slowo%10000))/10000
+  
+  puts dzien=slowo%100
+  puts miesiac=(slowo%10000-dzien)/100
+  
+  if miesiac == 0
+    miesiac = 12
+    rok=rok-1
+  end
+  
+  if dzien == 0
+    miesiac = daysInMonth[miesiac%12]
+    miesiac=miesiac-1
+    if miesiac == 0
+      miesiac = 12
+      rok=rok-1
+    end
+  end
+  while (dzien > daysInMonth[miesiac%12]) do 
+    dzien= dzien - daysInMonth[miesiac%12]
+    miesiac = miesiac+ 1
+  end
+  ile_dodac_lat = miesiac/12
+  miesiac = miesiac%12
+  rok= rok+ ile_dodac_lat 
+
+  data_poprawna=rok*10000+miesiac*100+dzien 
+  puts data_poprawna
+
+else
+  puts "Błędny wybór"
+
+end 
