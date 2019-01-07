@@ -79,7 +79,7 @@ nazwa[i] = inter.to_s(i)
 puts nazwa[i] 
 
 end
-
+puts "Szukam słów w słowniku..."
 se=[]
 
 for k in (11..36)
@@ -90,8 +90,13 @@ for k in (11..36)
 end
 end
 
+if se.length > 0 
+
 puts "Po konwersji Twojej daty znaleziono następujące słowa: "
 puts se 
+else 
+puts "Niestety, nie odnaleziono żadnych słów."
+end
 
 else
 print "Podana data jest #{checkDateUpdated(date) ? "" : "nie"}poprawna! \n"
@@ -99,14 +104,15 @@ system ('ruby valid.rb')
 end 
 
 elsif abc.to_s == "2"
-data = gets
+puts "Podaj słowo do konwersji: "
+  data = gets
   daysInMonth=[31,28,31,30,31,30,31,31,30,31,30,31]
 
   slowo=data.to_i(36)
   rok=(slowo-(slowo%10000))/10000
   
-  puts dzien=slowo%100
-  puts miesiac=(slowo%10000-dzien)/100
+   dzien=slowo%100
+   miesiac=(slowo%10000-dzien)/100
   
   if miesiac == 0
     miesiac = 12
@@ -130,9 +136,10 @@ data = gets
   rok= rok+ ile_dodac_lat 
 
   data_poprawna=rok*10000+miesiac*100+dzien 
+  puts "Podane slowo w postaci daty: "
   puts data_poprawna
 
 else
   puts "Błędny wybór"
-
+  system ('ruby valid.rb') 
 end 
