@@ -1,0 +1,89 @@
+require 'set'
+puts "Podaj swoją datę urodzenia"  	#communicate
+
+data = gets 				#getting date of birth from user
+def checkDateUpdated(aDate)		#function checking the date  
+  matched =
+    %r{
+        (?<year>
+        (^            #no input before the start
+          [1-9]\d{3}  #a year cannot start from the zero
+        )
+      )
+      (?<month>
+        (0[1-9])      #a month can start from the zero
+        |
+        (1[0-2])      #or it could be just 10, 11 or 12 of course
+      )
+      (?<day>
+        (0[1-9])      #a day can start from the zero
+        |(1[0-9])     #or should fall into the range [1..31]
+        |(2[0-9])
+        |30
+        |31
+      )$              #marks there should be the end of the input
+    }x.match(aDate)
+
+    if (matched)
+      day, month, year = matched[:day], matched[:month], matched[:year]
+      day = day[-1] if day[0] == "0"
+      month = month[-1] if month[0] == "0"
+
+      year, month, day = year.to_i, month.to_i, day.to_i
+
+      require 'date'
+      begin
+        date = Date.new(year, month, day)
+      rescue ArgumentError => e
+       
+	return false
+
+      end
+
+      true
+
+    else
+
+      false
+
+    end
+end
+ 
+date = data
+
+checkDateUpdated(date) ? wynik = "tak" : wynik= "nie" 
+if wynik == "tak"
+puts "Dziękuję. Trwa analiza..."
+
+dictionary=[]
+File.open('slowa.txt','r') do |file|
+file.each {|line| dictionary<<line}
+end
+
+#dictionary =File.readlines("slowa.txt")
+#dictionary.inspect
+
+puts "Twoja data w innych systemach:" 
+
+inter = data.to_i
+nazwa = [] 
+
+for i in (11..36)
+nazwa[i] = inter.to_s(i) 
+puts nazwa[i] 
+
+end
+
+def same_elements?(nazwa, dictionary)
+  puts nazwa.to_set == dictionary.to_set
+  
+end
+
+same_elements?(nazwa,dictionary[0..24]) 
+
+else
+print "Podana data jest #{checkDateUpdated(date) ? "" : "nie"}poprawna! \n"
+system ('ruby valid.rb') 
+end
+
+
