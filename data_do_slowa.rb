@@ -80,8 +80,8 @@ class DataDoSlowa
 		end
 	end
 	def znajdzWSlowniku
-		for k in (11..36)
-			for l in (0..2965376)
+		for k in (11..@nazwa.length-1)
+			for l in (0..@dictionary.length-1)
 				if @nazwa[k].to_s == @dictionary[l].to_s
 					@se = @nazwa[k] 
 				end
