@@ -1,4 +1,5 @@
 class DataDoSlowa
+
 	def initialize(data)
 		@data = data 
 	end
@@ -76,10 +77,11 @@ class DataDoSlowa
 		@nazwa = [] 
 		for i in (11..36)
 			@nazwa[i] = @date.to_i.to_s(i) 
-			puts @nazwa[i] 
+			print "   #{i}:      #{@nazwa[i]}\n"
 		end
 	end
 	def znajdzWSlowniku
+		@se = []
 		for k in (11..@nazwa.length-1)
 			for l in (0..@dictionary.length-1)
 				if @nazwa[k].to_s == @dictionary[l].to_s
@@ -89,7 +91,7 @@ class DataDoSlowa
 		end
 		if @se.length > 0 
 			puts "Po konwersji Twojej daty znaleziono następujące słowa: "
-			puts @se 
+			print "   #{@se}\n"
 		else 
 			puts "Niestety, nie odnaleziono żadnych słów."
 		end
