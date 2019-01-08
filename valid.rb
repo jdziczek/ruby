@@ -1,27 +1,27 @@
-require 'set'
-load 'slowo_do_daty.rb'
-load 'data_do_slowa.rb'
+require 'set'									# 
+load 'slowo_do_daty.rb' 						# załadowanie dwóch klas (oddzielne pliki)
+load 'data_do_slowa.rb'							#
 
-puts "WITAJ W ANALIZATORZE DAT! "
-puts "Z której opcji chcesz skorzystać?"
-puts " 1 - konwersja daty na słowa" 
-puts " 2 - konwersja słowa na datę" 
+puts "WITAJ W ANALIZATORZE DAT! "				# ekran powialny
+puts "Z której opcji chcesz skorzystać?"		# prośba o wybór opcji przez użytkownika 
+puts " 1 - konwersja daty na słowa" 			#
+puts " 2 - konwersja słowa na datę" 			#
 
-case gets.chomp
-when "1"
-	puts "Podaj swoją datę urodzenia"  	#communicate
-	input = gets 				#getting date of birth from user
-	c = DataDoSlowa.new(input)
-	c.sprawdzDate
+case gets.chomp									# popbranie odpowiedzi oraz uzależnienie od niej dalszego działania
+when "1"										# wybranie opcji nr "1" pzez użytkownika
+	puts "Podaj swoją datę urodzenia"  			# komunikat - prośba o podanie daty
+	input = gets 								# pobranie daty
+	c = DataDoSlowa.new(input)					# przypisanie pobranej daty jako obiekt odpowiedniej klasy
+	c.sprawdzDate								# uruchomienie funkcji sprawdzania danych
 
-when "2"
-	puts "Podaj słowo do konwersji: "
-	input = gets
-	calculator= SlowoDoDaty.new(input)
-	calculator.procesujSlowo
-	calculator.wypiszPoprawnaDate
+when "2"										# wybranie przez użytkownika opcji nr "2" 
+	puts "Podaj słowo do konwersji: "			# komunikat  - prośba o podanie słowa do kowersji
+	input = gets								# pobranie słowa 
+	calculator= SlowoDoDaty.new(input)			# przypisanie pobranego słowa jako obiekt odpowiedniej klasy 
+	calculator.procesujSlowo					# uruchomienie funkcji konwersji słowa na datę 
+	calculator.wypiszPoprawnaDate				# uruchomienie funkcji poprawiającej daty 
 
 else
-  puts "Błędny wybór"
+  puts "Błędny wybór"							# wybranie przez użytkownika niepoprawnej opcji
 
 end 
