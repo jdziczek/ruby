@@ -1,32 +1,32 @@
-class DataDoSlowa
+class DataDoSlowa														# utworzenie klasy 	
 
-	def initialize(data)
+	def initialize(data)											# inicjalizacja 
 		@data = data 
 	end
 	
-	def checkDateUpdated(aDate)		#function checking the date  
-	  matched =
+	def checkDateUpdated(aDate)								# definicja funkcji sprawdzania poprawności daty - tylko poprawne daty będą konwertowane
+	  matched =																	# tworzenie schematu do którego musi dopasować się data
 		%r{
 			(?<year>
-			(^            #no input before the start
-			  [1-9]\d{3}  #a year cannot start from the zero
+			(^           														# nie powinno być ż adnego znaku przez rozpoczęciem
+			  [1-9]\d{3}  													# rok nie może zaczynać się od zera
 			)
 		  )
 		  (?<month>
-			(0[1-9])      #a month can start from the zero
-			|
-			(1[0-2])      #or it could be just 10, 11 or 12 of course
+				(0[1-9])      												# miesiąc może zaczynać się od zera, jednak na drugim miejscu zera być nie może
+				|
+				(1[0-2])      												# lub miesiąc może być 10, 11 lub 12
 		  )
 		  (?<day>
-			(0[1-9])      #a day can start from the zero
-			|(1[0-9])     #or should fall into the range [1..31]
-			|(2[0-9])
-			|30
-			|31
-		  )$              #marks there should be the end of the input
-		}x.match(aDate)
+				(0[1-9])      												# dzień może zaczynać się od zera, jednak na drugim miejscu zera być nie może
+				|(1[0-9])     												#
+				|(2[0-9])															# lub powiniec mieścić się w przedziale od 10 do 31
+				|30																		#	
+				|31																		#
+		  )$             
+		}x.match(aDate)													# wprowadzona data musi pasować do schematu
 
-		if (matched)
+		if (matched)														# jeżeli pasuje, wykonywane są dalsze instrukcje
 		  day, month, year = matched[:day], matched[:month], matched[:year]
 		  day = day[-1] if day[0] == "0"
 		  month = month[-1] if month[0] == "0"
@@ -39,62 +39,59 @@ class DataDoSlowa
 		  rescue ArgumentError => e
 		   
 		return false
-
 		  end
-
 		  true
-
 		else
-
 		  false
-
 		end
 	end
 	 
-
-	def sprawdzDate
-		@date = @data
+	def sprawdzDate																# definicja funkcji sprawdzającej datę
+		@date = @data																# zmienna globalna
 		checkDateUpdated(@date) ? wynik = "tak" : wynik= "nie"
-		if wynik == "tak"
-			analiza
+		if wynik == "tak"														# jeżeli data przeszła sprawdzenie poprawności pozytywnie
+			analiza																		# wykonywana jest funkcja analizy daty
 		else
 			print "Podana data jest #{checkDateUpdated(@date) ? "" : "nie"}poprawna! \n"
-		end
+		end																					# jeżeli nie - wyświetlany jest komunikat
 	end
-	def wczytajSlownik
-		@dictionary=[]
-		@dictionary = File.open('slowa.txt', 'r'){|file| file.readlines.collect{|line|line.chomp}}
-	end
-	def analiza
-		puts "Dziękuję. Trwa analiza..."
-		wczytajSlownik
+	
+	def wczytajSlownik														# definicja funkcji wczytującej słownik
+		@slownik=[]													    		# utworzenie pustej tablicy (globalnej) zawierającej słownik
+		@slownik = File.open('slowa.txt', 'r'){|file| file.readlines.collect{|line|line.chomp}}
+	end																						# wczytanie slownika jako tablicy (z obcięciem znaku /n na końcu każdej linni, bug Windowsa)
 
-		puts "Twoja data w innych systemach:"
-		konwertujNaRozneSystemy	
-		znajdzWSlowniku
+	def analiza															  		# definicja funkcji analizującej datę
+		puts "Dziękuję. Trwa analiza..."						# komunikat
+		wczytajSlownik															# wykonywana jest fukcja wczytywania słownika
+		puts "Twoja data w innych systemach:"				# komunikat
+		konwertujNaRozneSystemy											# uruchamiana jest funkcja konwersji daty
+		puts "Szukam w słowniku..." 								# komunikat 
+		znajdzWSlowniku															# uruchamiana jest funkcja szukania przekonwertowanych dat w słowniku
 	end
-	def konwertujNaRozneSystemy
-		@nazwa = [] 
-		for i in (11..36)
-			@nazwa[i] = @date.to_i.to_s(i) 
-			print "   #{i}:      #{@nazwa[i]}\n"
+	
+	def konwertujNaRozneSystemy										# definicja funkcji konwersji daty
+		@noweslowo = [] 														# utworzenie pustej tablicy 
+		for i in (11..36)														# konwersja daty w systemach liczbowych od 11 do 36 
+			@noweslowo[i] = @date.to_i.to_s(i) 				# wpisanie do tablicy
+			print "   #{i}:      #{@noweslowo[i]}\n"	# wypisanie na ekran
 		end
 	end
-	def znajdzWSlowniku
-		@se = []
-		for k in (11..@nazwa.length-1)
-			for l in (0..@dictionary.length-1)
-				if @nazwa[k].to_s == @dictionary[l].to_s
-					@se = @nazwa[k] 
+	
+	def znajdzWSlowniku														# definicja funkcji szukania słów w słowniku
+		@znalezione = []														# utworzenie pustej tablicy dla 
+		for k in (11..@noweslowo.length-1) 					# porownywanie tablicy ze slownikiem i z przekonwertowanymi datami
+			for l in (0..@slownik.length-1)						# jeżeli znaleziono takie same słowo (data jest istaniejącym słowem)
+				if @noweslowo[k].to_s == @slownik[l].to_s
+					@znalezione = @noweslowo[k] 				  # wpisanie znalezionego slowa do tablicy 
 				end
 			end
 		end
-		if @se.length > 0 
+		if @znalezione.length > 0 									# jeżeli tablica znalezionych słów nie jest pusta
 			puts "Po konwersji Twojej daty znaleziono następujące słowa: "
-			print "   #{@se}\n"
-		else 
+			print "   #{@znalezione}\n"								# wyswietl komunikat i pokaż tablicę
+		else 																				# w przeciwnym wypadku - komunikat
 			puts "Niestety, nie odnaleziono żadnych słów."
 		end
 	end
-
 end
