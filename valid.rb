@@ -1,5 +1,4 @@
-require 'set'									# 
-load 'slowo_do_daty.rb' 						# załadowanie dwóch klas (oddzielne pliki)
+load 'slowo_do_daty.rb' 						# załadowanie dwóch pozostałych plików
 load 'data_do_slowa.rb'							#
 
 puts "WITAJ W ANALIZATORZE DAT! "				# ekran powialny
