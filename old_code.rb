@@ -1,118 +1,112 @@
-require 'set'
-puts "WITAJ W ANALIZATORZE DAT! "
-puts "Z której opcji chcesz skorzystać?"
-puts " 1 - konwersja daty na słowa" 
-puts " 2 - konwersja słowa na datę" 
+puts "WITAJ W ANALIZATORZE DAT! "                         # ekran powtalny
+puts "Z której opcji chcesz skorzystać?"                  # prośba o wprowadzenie informacji o opcji z której użytkownik chce skorzystać
+puts " 1 - konwersja daty na słowa"                       #
+puts " 2 - konwersja słowa na datę"                       #
 
-abc = gets 
-abc = abc.chomp
-if abc.to_s == "1"
+abc = gets                                                # pobranie od użytkownika informacji o tym, z której opcji chce skorzystać
+abc = abc.chomp                                           # usunięcie ze stringa znaku końca linii (bug Windowsa)
+if abc.to_s == "1"                                        # instrukcje do wykonania kiedy użytkownik wybrał opcję "1" - konwersja daty na słowo
 
-puts "Podaj swoją datę urodzenia"  	#communicate
+puts "Podaj swoją datę urodzenia"  	                      # prośba o wprowadzenie daty 
 
-data = gets 				#getting date of birth from user
-def checkDateUpdated(aDate)		#function checking the date  
-  matched =
+data = gets 				                                      # pobranie daty od użytkownika
+def checkDateUpdated(aDate)		                            # definicja funkcji sprawdzania poprawności daty - tylko poprawne daty będą konwertowane
+  matched =                                               # tworzenie schematu do którego musi dopasować się data
     %r{
         (?<year>
-        (^            #no input before the start
-          [1-9]\d{3}  #a year cannot start from the zero
+        (^                                                  # nie powinno być ż adnego znaku przez rozpoczęciem
+          [1-9]\d{3}                                        # rok nie może zaczynać się od zera
         )
       )
       (?<month>
-        (0[1-9])      #a month can start from the zero
+        (0[1-9])                                            # miesiąc może zaczynać się od zera, jednak na drugim miejscu zera być nie może
         |
-        (1[0-2])      #or it could be just 10, 11 or 12 of course
+        (1[0-2])                                            # lub miesiąc może być 10, 11 lub 12
       )
       (?<day>
-        (0[1-9])      #a day can start from the zero
-        |(1[0-9])     #or should fall into the range [1..31]
-        |(2[0-9])
-        |30
+        (0[1-9])                                            # dzień może zaczynać się od zera, jednak na drugim miejscu zera być nie może
+        |(1[0-9])                                           # lub powiniec mieścić się w przedziale od 10 do 31
+        |(2[0-9])                                           #
+        |30                                                 #      
         |31
-      )$              #marks there should be the end of the input
-    }x.match(aDate)
+      )$              
+    }x.match(aDate)                                       # wprowadzana data jest analizowana ze schematem
 
-    if (matched)
+    if (matched)                                          # jeżeli data pasuje do schematu wykonywane są dalsze instrukcje
       day, month, year = matched[:day], matched[:month], matched[:year]
-      day = day[-1] if day[0] == "0"
-      month = month[-1] if month[0] == "0"
+      day = day[-1] if day[0] == "0"        
+      month = month[-1] if month[0] == "0"  
 
       year, month, day = year.to_i, month.to_i, day.to_i
 
       require 'date'
       begin
-        date = Date.new(year, month, day)
+        date = Date.new(year, month, day)                #stworzenie zmiennej date zawierającej datę
       rescue ArgumentError => e
        
 	return false
-
       end
-
       true
-
     else
-
       false
-
     end
 end
  
-date = data
+date = data                                              # przypisanie daty wprowadzonej przez użytkownika do zmiennej date
 
-checkDateUpdated(date) ? wynik = "tak" : wynik= "nie" 
+checkDateUpdated(date) ? wynik = "tak" : wynik= "nie"    # uruchomienie funkcji sprawdzenia poprawności podanej daty oraz przekazanie parametru wynik
 if wynik == "tak"
 puts "Dziękuję. Trwa analiza..."
 
-dictionary=[]
+dictionary=[]                                            # utworzenie pustej tablicy dla słownika oraz wpisanie słownika z pliku do tablicy (z pominięciem \n)
 dictionary = File.open('slowa.txt', 'r'){|file| file.readlines.collect{|line|line.chomp}}
 puts "Twoja data w innych systemach:" 
 
 inter = data.to_i
 nazwa = [] 
 
-for j in (0..10)
+for j in (0..10)                                         # dla systemów o podstawie niższej niż 11 wpisywane jest automatycznie 0 (nie ma tam słów)
   nazwa[j] = "0"
 end
-for i in (11..36)
+for i in (11..36)                                        # dla systemów o podstawach od 11 do 36  data jest konwertoana i wpisywana do tablicy
 nazwa[i] = inter.to_s(i) 
-puts nazwa[i] 
+puts nazwa[i]                                            # tablica jest wypisywana
 
 end
 puts "Szukam słów w słowniku..."
-se=[]
+se=[]                                                    # utworzenie pustej tablicy dla znalezionych duplikatów w obu tablicach
 
-for k in (11..36)
-  for l in (0..2965376)
+for k in (11..36)                                        # porównywanie każego elementu tablicy z przekonwertowanymi datami do kolejnych elementów słownika
+  for l in (0..2965376)                                  
   if nazwa[k].to_s == dictionary[l].to_s
-  se = nazwa[k] 
+  se = nazwa[k]                                          # wpisywnaie znalezionych duplikatów do tablicy
   end
 end
 end
 
-if se.length > 0 
+if se.length > 0                                         # jeżeli tablica nie jest pusta - zostaje wyświetlona
 
 puts "Po konwersji Twojej daty znaleziono następujące słowa: "
 puts se 
-else 
+else                                                     # jeżeli tablica jest pusta - zostaje wyswietlony komunikat
 puts "Niestety, nie odnaleziono żadnych słów."
 end
 
-else
+else                                                     # jeżeli wprowadzona przez użytkownika data była niepoprawna - pojawia się komunikat   
 print "Podana data jest #{checkDateUpdated(date) ? "" : "nie"}poprawna! \n"
-system ('ruby valid.rb') 
+system ('ruby valid.rb')                                 # program jest restartowany 
 end 
 
-elsif abc.to_s == "2"
+elsif abc.to_s == "2"                                    # jeżeli uzytkownik wybrał opcję "2" - konwersja słów na daty 
 puts "Podaj słowo do konwersji: "
-  data = gets
-  daysInMonth=[31,28,31,30,31,30,31,31,30,31,30,31]
+  wslowo = gets                                          # pobranie od uzytkownika slowa
+  daysInMonth=[31,28,31,30,31,30,31,31,30,31,30,31]      # tablica z liczbą dni w poszczególnych miesiącach
 
-  slowo=data.to_i(36)
-  rok=(slowo-(slowo%10000))/10000
+  slowo=wslowo.to_i(36)                                  # konwersja słowa 
+  rok=(slowo-(slowo%10000))/10000                        # 
   
-   dzien=slowo%100
-   miesiac=(slowo%10000-dzien)/100
+   dzien=slowo%100                                       # ostatnie dwa znaki reprezentują dzień
+   miesiac=(slowo%10000-dzien)/100                        
   
   if miesiac == 0
     miesiac = 12
@@ -127,19 +121,19 @@ puts "Podaj słowo do konwersji: "
       rok=rok-1
     end
   end
-  while (dzien > daysInMonth[miesiac%12]) do 
+  while (dzien > daysInMonth[miesiac%12]) do          #
     dzien= dzien - daysInMonth[miesiac%12]
     miesiac = miesiac+ 1
   end
-  ile_dodac_lat = miesiac/12
-  miesiac = miesiac%12
-  rok= rok+ ile_dodac_lat 
+  ile_dodac_lat = miesiac/12                          # obliczenie o ile lat należy zwiększyć rok
+  miesiac = miesiac%12                                # obliczenie miesiąca
+  rok= rok+ ile_dodac_lat                             # obliczanie roku 
 
-  data_poprawna=rok*10000+miesiac*100+dzien 
-  puts "Podane slowo w postaci daty: "
-  puts data_poprawna
+  data_poprawna=rok*10000+miesiac*100+dzien           # utworzenie liczby reprezentującej poprawny kod
+  puts "Podane slowo w postaci daty: "                # wypisanie daty 
+  puts data_poprawna                                  # 
 
 else
-  puts "Błędny wybór"
-  system ('ruby valid.rb') 
+  puts "Błędny wybór"                                 # jeżeli użytkownik wprowadził błędny znak przy wyborze opcji 
+  system ('ruby valid.rb')                            # program jest uruchamiany od nowa 
 end 
