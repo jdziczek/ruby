@@ -108,12 +108,12 @@ puts "Podaj słowo do konwersji: "
    dzien=slowo%100                                       # ostatnie dwa znaki reprezentują dzień
    miesiac=(slowo%10000-dzien)/100                        
   
-  if miesiac == 0
+  if miesiac == 0                                        # jeżeli miesiąc po obliczeniach = 0, zamień na grudzień i odejmij rok
     miesiac = 12
     rok=rok-1
   end
   
-  if dzien == 0
+  if dzien == 0                                          # jeżeli dzień po obliczeniach = 0, sprawdz ile dni ma miesiąc, odejmij miesiąc, ustaw dzień 
     miesiac = daysInMonth[miesiac%12]
     miesiac=miesiac-1
     if miesiac == 0
@@ -121,19 +121,19 @@ puts "Podaj słowo do konwersji: "
       rok=rok-1
     end
   end
-  while (dzien > daysInMonth[miesiac%12]) do          #
+  while (dzien > daysInMonth[miesiac%12]) do             # przeliczanie dni na dodatkowe miesiące (z uwzględnieniem ilości dni w danym miesiącu)
     dzien= dzien - daysInMonth[miesiac%12]
     miesiac = miesiac+ 1
   end
-  ile_dodac_lat = miesiac/12                          # obliczenie o ile lat należy zwiększyć rok
-  miesiac = miesiac%12                                # obliczenie miesiąca
-  rok= rok+ ile_dodac_lat                             # obliczanie roku 
+  ile_dodac_lat = miesiac/12                             # obliczenie o ile lat należy zwiększyć rok
+  miesiac = miesiac%12                                   # obliczenie miesiąca
+  rok= rok+ ile_dodac_lat                                # obliczanie roku 
 
-  data_poprawna=rok*10000+miesiac*100+dzien           # utworzenie liczby reprezentującej poprawny kod
-  puts "Podane slowo w postaci daty: "                # wypisanie daty 
-  puts data_poprawna                                  # 
+  data_poprawna=rok*10000+miesiac*100+dzien              # utworzenie liczby reprezentującej poprawny kod
+  puts "Podane slowo w postaci daty: "                   # wypisanie daty 
+  puts data_poprawna                                     # 
 
 else
-  puts "Błędny wybór"                                 # jeżeli użytkownik wprowadził błędny znak przy wyborze opcji 
-  system ('ruby valid.rb')                            # program jest uruchamiany od nowa 
+  puts "Błędny wybór"                                    # jeżeli użytkownik wprowadził błędny znak przy wyborze opcji 
+  system ('ruby valid.rb')                               # program jest uruchamiany od nowa 
 end 
