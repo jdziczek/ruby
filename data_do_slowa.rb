@@ -4,7 +4,7 @@ class DataDoSlowa														# utworzenie klasy
 		@data = data 
 	end
 	
-	def checkDateUpdated(aDate)								# definicja funkcji sprawdzania poprawności daty - tylko poprawne daty będą konwertowane
+	def checkDateUpdated(aDate)								# definicja metody sprawdzania poprawności daty - tylko poprawne daty będą konwertowane
 	  matched =																	# tworzenie schematu do którego musi dopasować się data
 		%r{
 			(?<year>
@@ -46,8 +46,8 @@ class DataDoSlowa														# utworzenie klasy
 		end
 	end
 	 
-	def sprawdzDate																# definicja funkcji sprawdzającej datę
-		@date = @data																# zmienna globalna
+	def sprawdzDate																# definicja metoda prawdzającej datę
+		@date = @data																# atrybut data
 		checkDateUpdated(@date) ? wynik = "tak" : wynik= "nie"
 		if wynik == "tak"														# jeżeli data przeszła sprawdzenie poprawności pozytywnie
 			analiza																		# wykonywana jest funkcja analizy daty
@@ -56,21 +56,21 @@ class DataDoSlowa														# utworzenie klasy
 		end																					# jeżeli nie - wyświetlany jest komunikat
 	end
 	
-	def wczytajSlownik														# definicja funkcji wczytującej słownik
+	def wczytajSlownik														# definicja metody wczytującej słownik
 		@slownik=[]													    		# utworzenie pustej tablicy (globalnej) zawierającej słownik
 		@slownik = File.open('slowa.txt', 'r'){|file| file.readlines.collect{|line|line.chomp}}
 	end																						# wczytanie slownika jako tablicy (z obcięciem znaku /n na końcu każdej linni, bug Windowsa)
 
-	def analiza															  		# definicja funkcji analizującej datę
+	def analiza															  		# definicja metody analizującej datę
 		puts "Dziękuję. Trwa analiza..."						# komunikat
-		wczytajSlownik															# wykonywana jest fukcja wczytywania słownika
+		wczytajSlownik															# wykonywana jest metoda wczytywania słownika
 		puts "Twoja data w innych systemach:"				# komunikat
-		konwertujNaRozneSystemy											# uruchamiana jest funkcja konwersji daty
+		konwertujNaRozneSystemy											# uruchamiana jest metoda konwersji daty
 		puts "Szukam w słowniku..." 								# komunikat 
-		znajdzWSlowniku															# uruchamiana jest funkcja szukania przekonwertowanych dat w słowniku
+		znajdzWSlowniku															# uruchamiana jest metoda szukania przekonwertowanych dat w słowniku
 	end
 	
-	def konwertujNaRozneSystemy										# definicja funkcji konwersji daty
+	def konwertujNaRozneSystemy										# definicja metody konwersji daty
 		@noweslowo = [] 														# utworzenie pustej tablicy 
 		for i in (11..36)														# konwersja daty w systemach liczbowych od 11 do 36 
 			@noweslowo[i] = @date.to_i.to_s(i) 				# wpisanie do tablicy
@@ -78,7 +78,7 @@ class DataDoSlowa														# utworzenie klasy
 		end
 	end
 	
-	def znajdzWSlowniku														# definicja funkcji szukania słów w słowniku
+	def znajdzWSlowniku														# definicja metody szukania słów w słowniku
 		@znalezione = []														# utworzenie pustej tablicy dla 
 		for k in (11..@noweslowo.length-1) 					# porownywanie tablicy ze slownikiem i z przekonwertowanymi datami
 			for l in (0..@slownik.length-1)						# jeżeli znaleziono takie same słowo (data jest istaniejącym słowem)
